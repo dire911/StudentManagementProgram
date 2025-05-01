@@ -9,8 +9,11 @@ as long as you have a average grade of 60 between the 4 exams, you have passed
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 using namespace std;
 
+class Student;
+void saveToFile(Student students[], int count);
 class Student {
     private:
         string name;
@@ -70,6 +73,21 @@ class Student {
         }
 
 };
+void saveToFile(Student students[], int count){
+    ofstream file("students.txt");
+    for(int i = 0; i < count; i++){
+        file << students[i].getName() << ",";
+        file << students[i].getId() << ",";
+        vector<int> grades = students[i].getGrades();
+        for(int j = 0; j < grades.size(); j++) {
+            file << grades[j];
+            if (j < grades.size() - 1) file << ",";
+        }
+        file << endl;
+    }
+    file.close();
+    cout << "Students saved to file.\n";
+}
 
     void menu(){
         cout << "\nStudent Grade Management System\n";
@@ -77,7 +95,8 @@ class Student {
         cout << "2.Display all students\n";
         cout << "3.Calculate and display average grades\n";
         cout << "4.Show pass/fail status\n";
-        cout << "5.Exit\n";
+        cout << "5.Save students to file\n";
+        cout << "6.Exit\n";
         cout << "Choose an option. \n";
     }
 
@@ -95,8 +114,8 @@ int main(){
         cin.ignore(1000, '\n'); // Discard invalid input
         cout << "Incorrect Input! Please enter a number between 1 and 5.\n";
     } 
-    else if (options < 1 || options > 5) {
-        cout << "Incorrect Input! Enter a number between 1 and 5.\n";
+    else if (options < 1 || options > 6) {
+        cout << "Incorrect Input! Enter a number between 1 and 6.\n";
     } 
 
         switch(options){
@@ -147,6 +166,10 @@ int main(){
             }
             break;
             case 5:
+                saveToFile(students, studentCount);
+                break;
+
+            case 6:
                 cout<< "goodbye.\n";
                 exit(0);
             }
